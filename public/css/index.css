@@ -25,7 +25,9 @@ body {
     text-shadow: 1px 1px 1px #ccc;
     padding-top: 5px;
     padding-bottom: 5px;
-    border-bottom: 2px solid #000; }
+    border-bottom: 2px solid #000;
+    background: linear-gradient(to top left, #000, #404040);
+    color: #FFF; }
   #container #rooms {
     width: 202px;
     float: left;
@@ -81,20 +83,21 @@ body {
     width: 202px;
     float: right;
     box-shadow: inset 1px 0 #ccc; }
-    #container #users h2 {
-      margin-bottom: 4px; }
     #container #users .user-name {
-      padding: 2px 5px;
+      padding: 4px 5px;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap; }
+    #container #users .user-name.you {
+      color: #FFF;
+      background-color: #00c0ff; }
   #container #prompt {
     position: absolute;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at 50% calc(50% - 180px), rgba(100, 100, 100, 0.5), rgba(20, 20, 20, 0.5)); }
+    background: radial-gradient(circle at 50% calc(50% - 180px), rgba(100, 100, 100, 0.5), rgba(0, 0, 0, 0.6)); }
     #container #prompt .prompt-box {
       position: absolute;
       top: calc(50% - 200px);
@@ -111,6 +114,7 @@ body {
         font-size: 18px;
         margin-bottom: 15px; }
       #container #prompt .prompt-box .prompt-input {
+        display: block;
         border-radius: 1px;
         border: 0;
         padding: 6px;
@@ -118,18 +122,17 @@ body {
         margin-left: 50%;
         transform: translateX(-50%);
         font-size: 16px;
-        outline: 0;
-        display: block; }
+        outline: 0; }
       #container #prompt .prompt-box .prompt-input:focus::-webkit-input-placeholder {
         color: transparent; }
       #container #prompt .prompt-box .prompt-submit {
+        display: inline-block;
         font-size: 20px;
         font-weight: lighter;
         letter-spacing: 1px;
         margin-top: 15px;
         margin-bottom: 1px;
         padding: 0 10px 4px 10px;
-        display: inline-block;
         cursor: pointer; }
       #container #prompt .prompt-box .prompt-submit:hover {
         border-bottom: 1px solid #FFF;
@@ -138,5 +141,9 @@ body {
     display: block; }
   #container #prompt.inactive, #container #prompt:not(.active) {
     display: none; }
+  #container #prompt[data-type="user"] .highlight {
+    color: #00c0ff; }
+  #container #prompt[data-type="room"] .highlight {
+    color: #00f900; }
 
 /*# sourceMappingURL=index.css.map */

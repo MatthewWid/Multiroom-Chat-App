@@ -7,8 +7,9 @@ body {
 	font-family: Helvetica, Arial;
 }
 
-$sidewidth: 202px;
+$sideWidth: 202px;
 $createRoomBG: rgb(238, 238, 238);
+$backgroundGradient: linear-gradient(to top left, #000, #404040);
 
 #container {
 	.section {
@@ -28,10 +29,12 @@ $createRoomBG: rgb(238, 238, 238);
 			padding-top: 5px;
 			padding-bottom: 5px;
 			border-bottom: 2px solid #000;
+			background: $backgroundGradient;
+			color: #FFF;
 		}
 	}
 	#rooms {
-		width: $sidewidth;
+		width: $sideWidth;
 		float: left;
 		border-right: 1px solid #ccc;
 		position: relative;
@@ -93,22 +96,25 @@ $createRoomBG: rgb(238, 238, 238);
 		}
 	}
 	#chat {
-		width: calc(100% - #{$sidewidth * 2});
+		width: calc(100% - #{$sideWidth * 2});
 		float: left;
 	}
 	#users {
-		width: $sidewidth;
+		width: $sideWidth;
 		float: right;
 		box-shadow: inset 1px 0 #ccc;
 
 		h2 {
-			margin-bottom: 4px;
 		}
 		.user-name {
-			padding: 2px 5px;
+			padding: 4px 5px;
 			text-overflow: ellipsis;
 			overflow: hidden;
 			white-space: nowrap;
+		}
+		.user-name.you {
+			color: #FFF;
+			background-color: #00c0ff;
 		}
 	}
 	#prompt {
@@ -117,7 +123,7 @@ $createRoomBG: rgb(238, 238, 238);
 		left: 0;
 		width: 100vw;
 		height: 100vh;
-		background: radial-gradient(circle at 50% calc(50% - 180px), rgba(100, 100, 100, 0.5), rgba(20, 20, 20, 0.5));
+		background: radial-gradient(circle at 50% calc(50% - 180px), rgba(100, 100, 100, 0.5), rgba(0, 0, 0, 0.6));
 
 		.prompt-box {
 			position: absolute;
@@ -125,7 +131,7 @@ $createRoomBG: rgb(238, 238, 238);
 			left: 50%;
 			transform: translate(-50%, -50%)/*scale(0)*/;
 			width: 600px;
-			background: linear-gradient(to top left, #000, #404040);
+			background: $backgroundGradient;
 			text-align: center;
 			padding: 30px 20px 25px 20px;
 			border-radius: 5px;
@@ -137,6 +143,7 @@ $createRoomBG: rgb(238, 238, 238);
 				margin-bottom: 15px;
 			}
 			.prompt-input {
+				display: block;
 				border-radius: 1px;
 				border: 0;
 				padding: 6px;
@@ -145,19 +152,18 @@ $createRoomBG: rgb(238, 238, 238);
 				transform: translateX(-50%);
 				font-size: 16px;
 				outline: 0;
-				display: block;
 			}
 			.prompt-input:focus::-webkit-input-placeholder {
 				color: transparent;
 			}
 			.prompt-submit {
+				display: inline-block;
 				font-size: 20px;
 				font-weight: lighter;
 				letter-spacing: 1px;
 				margin-top: 15px;
 				margin-bottom: 1px;
 				padding: 0 10px 4px 10px;
-				display: inline-block;
 				cursor: pointer;
 			}
 			.prompt-submit:hover {
@@ -177,5 +183,11 @@ $createRoomBG: rgb(238, 238, 238);
 	*/
 	#prompt.inactive, #prompt:not(.active) {
 		display: none;
+	}
+	#prompt[data-type="user"] .highlight {
+		color: #00c0ff;
+	}
+	#prompt[data-type="room"] .highlight {
+		color: #00f900;
 	}
 }
