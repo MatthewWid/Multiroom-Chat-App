@@ -1,0 +1,181 @@
+*, *:before, *:after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+body {
+	font-family: Helvetica, Arial;
+}
+
+$sidewidth: 202px;
+$createRoomBG: rgb(238, 238, 238);
+
+#container {
+	.section {
+		height: 100vh;
+
+		.list {
+			height: calc(100% - 40px);
+			padding-bottom: 40px;
+			overflow-y: scroll;
+		}
+	}
+	.sidebar {
+		h2 {
+			text-align: center;
+			font-size: 24px;
+			text-shadow: 1px 1px 1px #ccc;
+			padding-top: 5px;
+			padding-bottom: 5px;
+			border-bottom: 2px solid #000;
+		}
+	}
+	#rooms {
+		width: $sidewidth;
+		float: left;
+		border-right: 1px solid #ccc;
+		position: relative;
+
+		.room {
+			padding: 5px;
+			border-bottom: 1px solid #000;
+			height: 30px;
+			position: relative;
+			cursor: pointer;
+			font-style: italic;
+
+			* {
+				display: inline-block;
+			}
+			.room-name {
+				width: 160px;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				white-space: nowrap;
+			}
+			.connectionIndicator {
+				width: 15px;
+				height: 15px;
+				border: 1px solid #000;
+				//box-shadow: 0 0 0 1px #000;
+				border-radius: 50%;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				right: 5px;
+			}
+			.connectionIndicator.off {
+				background-color: #FFF;
+			}
+			.connectionIndicator.on {
+				background-color: #00ff00;
+			}
+		}
+		.room:hover {
+			background-color: rgb(235, 235, 235);
+		}
+		.list > div:last-of-type {
+			border-bottom: 0;
+		}
+		#newRoomButton {
+			position: absolute;
+			bottom: 0;
+			width: calc(100% - 1px);
+			text-align: center;
+			border-top: 1px solid #000;
+			padding: 10px 0;
+			background: repeating-linear-gradient(-45deg, #FFF, #FFF 10px, $createRoomBG 10px, $createRoomBG 20px);
+			cursor: pointer;
+			text-shadow: 1px 1px 1px #ccc;
+		}
+		#newRoomButton:hover {
+			background: $createRoomBG;
+		}
+	}
+	#chat {
+		width: calc(100% - #{$sidewidth * 2});
+		float: left;
+	}
+	#users {
+		width: $sidewidth;
+		float: right;
+		box-shadow: inset 1px 0 #ccc;
+
+		h2 {
+			margin-bottom: 4px;
+		}
+		.user-name {
+			padding: 2px 5px;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+	}
+	#prompt {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		background: radial-gradient(circle at 50% calc(50% - 180px), rgba(100, 100, 100, 0.5), rgba(20, 20, 20, 0.5));
+
+		.prompt-box {
+			position: absolute;
+			top: calc(50% - 200px);
+			left: 50%;
+			transform: translate(-50%, -50%)/*scale(0)*/;
+			width: 600px;
+			background: linear-gradient(to top left, #000, #404040);
+			text-align: center;
+			padding: 30px 20px 25px 20px;
+			border-radius: 5px;
+			color: #FFF;
+			box-shadow: 2px 2px 8px #000;
+			
+			.prompt-question {
+				font-size: 18px;
+				margin-bottom: 15px;
+			}
+			.prompt-input {
+				border-radius: 1px;
+				border: 0;
+				padding: 6px;
+				width: 80%;
+				margin-left: 50%;
+				transform: translateX(-50%);
+				font-size: 16px;
+				outline: 0;
+				display: block;
+			}
+			.prompt-input:focus::-webkit-input-placeholder {
+				color: transparent;
+			}
+			.prompt-submit {
+				font-size: 20px;
+				font-weight: lighter;
+				letter-spacing: 1px;
+				margin-top: 15px;
+				margin-bottom: 1px;
+				padding: 0 10px 4px 10px;
+				display: inline-block;
+				cursor: pointer;
+			}
+			.prompt-submit:hover {
+				border-bottom: 1px solid #FFF;
+				margin-bottom: 0;
+			}
+		}
+	}
+	#prompt.active {
+		display: block;
+	}
+	/*
+	#prompt.active .prompt-box {
+		transition: transform .2s ease;
+		transform: translate(-50%, -50%) scale(1);
+	}
+	*/
+	#prompt.inactive, #prompt:not(.active) {
+		display: none;
+	}
+}
