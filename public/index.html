@@ -1,73 +1,100 @@
 <!DOCTYPE html>
 <html>
-	
-	<head>
 
-		<title>Chatter</title>
+<head>
 
-		<link rel="stylesheet" type="text/css" href="css/index.css" />
+	<title>Chatter</title>
 
-		<script src="js/client.js" defer></script>
+	<link rel="stylesheet" type="text/css" href="css/index.css" />
 
-	</head>
+	<script src="js/client.js" defer></script>
 
-	<body>
+</head>
 
-		<div id="container">
-			<div id="rooms" class="section sidebar">
-				<h2>Chat rooms</h2>
-				
-				<div class="list">
-					<div class="room" title="the best chat i've ever seen">
-						<div class="room-name">the best chat i've ever seen</div>
-						<div class="connectionIndicator off"></div>
-					</div>
-					<div class="room" title="professional dev talk">
-						<div class="room-name">professional dev talk</div>
-						<div class="connectionIndicator on"></div>
-					</div>
-					<div class="room" title="dont join plx">
-						<div class="room-name">dont join plx</div>
-						<div class="connectionIndicator off"></div>
-					</div>
-					<div class="room" title="hehe">
-						<div class="room-name">hehe</div>
-						<div class="connectionIndicator off"></div>
-					</div>
+<body>
+
+	<div id="container">
+		<div id="rooms" class="section sidebar">
+			<h2>Chat rooms</h2>
+			
+			<div class="list">
+				<div class="room" title="the best chat i've ever seen">
+					<div class="room-name">the best chat i've ever seen</div>
+					<div class="connectionIndicator off"></div>
 				</div>
-
-				<div id="newRoomButton">Create room</div>
-			</div>
-
-			<div id="chat" class="section">
-					<div class="chat-container-messages"></div>
-					<div class="chat-container-input">
-						<textarea type="text" id="chat-text" placeholder="Send a message" resize="false"></textarea>
-						<div id="chat-send">
-							<div class="chat-send-inner">Chat</div>
-						</div>
-					</div>
-			</div>
-
-			<div id="users" class="section sidebar">
-				<h2>Users here now</h2>
-				
-				<div class="list">
-					<div class="user-name" title="Nello">Nello</div>
-					<div class="user-name" title="The most awesome guy ever">The most awesome guy ever</div>
-					<div class="user-name you" title="MatthewMob">MatthewMob</div>
-					<div class="user-name" title="Narmi">Narmi</div>
+				<div class="room" title="professional dev talk">
+					<div class="room-name">professional dev talk</div>
+					<div class="connectionIndicator on"></div>
+				</div>
+				<div class="room" title="dont join plx">
+					<div class="room-name">dont join plx</div>
+					<div class="connectionIndicator off"></div>
+				</div>
+				<div class="room" title="hehe">
+					<div class="room-name">hehe</div>
+					<div class="connectionIndicator off"></div>
 				</div>
 			</div>
-			<div id="prompt" class="inactive" data-type="user">
-				<div class="prompt-box">
-					<div class="prompt-question">Please enter a <span class="highlight">username</span>.</div>
-					<input type="text" class="prompt-input" placeholder="Name" />
-					<div class="prompt-submit">SUBMIT</div>
+
+			<div id="newRoomButton">Create room</div>
+		</div>
+
+		<div id="chat" class="section">
+			<div class="chat-container-messages list">
+				<div class="chat-container-inner">
+					<div class="chat-line">
+						<span class="from">MatthewMob</span><span class="colon">:</span> <span class="message">Hello everyone!</span>
+					</div>
+					<div class="chat-line">
+						<span class="from">Nello</span><span class="colon">:</span> <span class="message">shut up</span>
+					</div>
+					<div class="chat-line">
+						<span class="from">MatthewMob</span><span class="colon">:</span> <span class="message">?</span>
+					</div>
+					<div class="chat-line serverMsg">
+						<span class="from"></span><span class="colon">:</span> <span class="message">Nello has been permanently banned.</span>
+					</div>
+					<div class="chat-line">
+						<span class="from">Jdubuz</span><span class="colon">:</span> <span class="message">LOL</span>
+					</div>
+					<div class="chat-line">
+						<span class="from">Jdubuz</span><span class="colon">:</span> <span class="message">HAHAHAHAHHAAA</span>
+					</div>
+					<div class="chat-line">
+						<span class="from">MatthewMob</span><span class="colon">:</span> <span class="message">cya bois</span>
+					</div>
+					<div class="chat-line serverMsg">
+						<span class="message">MatthewMob has left.</span>
+					</div>
+				</div>
+			</div>
+			<div class="chat-container-input">
+				<textarea type="text" id="chat-text" placeholder="Send a message" resize="false"></textarea>
+				<div id="chat-send">
+					<div class="chat-send-inner">Chat</div>
 				</div>
 			</div>
 		</div>
 
-	</body>
+		<div id="users" class="section sidebar">
+			<h2>Users here now</h2>
+			
+			<div class="list">
+				<div class="user-name" title="Nello">Nello</div>
+				<div class="user-name" title="The most awesome guy ever">The most awesome guy ever</div>
+				<div class="user-name you" title="MatthewMob">MatthewMob</div>
+				<div class="user-name" title="Narmi">Jdubuz</div>
+			</div>
+		</div>
+		<div id="prompt" class="inactive" data-type="user">
+			<div class="prompt-box">
+				<div class="prompt-question">Please enter a <span id="highlight">username</span>.</div>
+				<input type="text" class="prompt-input" placeholder="Name" id="prompt-input" />
+				<div class="prompt-submit" id="prompt-submit">SUBMIT</div>
+			</div>
+		</div>
+	</div>
+
+</body>
 
 </html>

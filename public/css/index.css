@@ -117,6 +117,22 @@ body, textarea {
       #container #chat .chat-container-input #chat-send:hover .chat-send-inner {
         top: calc(50% - 1px);
         border-bottom: 2px solid #FFF; }
+    #container #chat .chat-container-messages {
+      position: relative;
+      height: calc(100% - 39px); }
+      #container #chat .chat-container-messages .chat-container-inner {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0; }
+        #container #chat .chat-container-messages .chat-container-inner .chat-line {
+          padding: 5px 10px; }
+          #container #chat .chat-container-messages .chat-container-inner .chat-line .from {
+            font-weight: bold; }
+        #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg {
+          background-color: #ccc; }
+          #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .from, #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .colon {
+            display: none; }
   #container #users {
     width: 202px;
     float: right;
@@ -179,9 +195,9 @@ body, textarea {
     display: block; }
   #container #prompt.inactive, #container #prompt:not(.active) {
     display: none; }
-  #container #prompt[data-type="user"] .highlight {
+  #container #prompt[data-type="user"] #highlight {
     color: #00c0ff; }
-  #container #prompt[data-type="room"] .highlight {
+  #container #prompt[data-type="room"] #highlight {
     color: #00f900; }
 
 /*# sourceMappingURL=index.css.map */
