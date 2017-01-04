@@ -80,9 +80,6 @@ $backgroundGradient: linear-gradient(to top left, #000, #404040);
 		.room:hover {
 			background-color: rgb(235, 235, 235);
 		}
-		.list > div:last-of-type {
-			border-bottom: 0;
-		}
 		#newRoomButton {
 			position: absolute;
 			bottom: 0;
@@ -148,6 +145,7 @@ $backgroundGradient: linear-gradient(to top left, #000, #404040);
 		.chat-container-messages {
 			position: relative;
 			height: calc(100% - 39px);
+			padding-bottom: 0;
 
 			.chat-container-inner {
 				position: absolute;
@@ -160,6 +158,9 @@ $backgroundGradient: linear-gradient(to top left, #000, #404040);
 
 					.from {
 						font-weight: bold;
+					}
+					.colon {
+						margin-right: 4px;
 					}
 				}
 				.chat-line.serverMsg {
@@ -266,4 +267,7 @@ $backgroundGradient: linear-gradient(to top left, #000, #404040);
 	#prompt[data-type="room"] #highlight {
 		color: #00f900;
 	}
+}
+#templates {
+	display: none;
 }

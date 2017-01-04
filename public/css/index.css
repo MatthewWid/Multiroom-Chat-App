@@ -64,8 +64,6 @@ body, textarea {
         background-color: #00ff00; }
     #container #rooms .room:hover {
       background-color: #ebebeb; }
-    #container #rooms .list > div:last-of-type {
-      border-bottom: 0; }
     #container #rooms #newRoomButton {
       position: absolute;
       bottom: 0;
@@ -119,7 +117,8 @@ body, textarea {
         border-bottom: 2px solid #FFF; }
     #container #chat .chat-container-messages {
       position: relative;
-      height: calc(100% - 39px); }
+      height: calc(100% - 39px);
+      padding-bottom: 0; }
       #container #chat .chat-container-messages .chat-container-inner {
         position: absolute;
         bottom: 0;
@@ -129,6 +128,8 @@ body, textarea {
           padding: 5px 10px; }
           #container #chat .chat-container-messages .chat-container-inner .chat-line .from {
             font-weight: bold; }
+          #container #chat .chat-container-messages .chat-container-inner .chat-line .colon {
+            margin-right: 4px; }
         #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg {
           background-color: #ccc; }
           #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .from, #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .colon {
@@ -199,5 +200,8 @@ body, textarea {
     color: #00c0ff; }
   #container #prompt[data-type="room"] #highlight {
     color: #00f900; }
+
+#templates {
+  display: none; }
 
 /*# sourceMappingURL=index.css.map */
