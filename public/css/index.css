@@ -6,200 +6,193 @@
 body, textarea {
   font-family: Helvetica, Arial; }
 
-#container {
-  /*
-  #prompt.active .prompt-box {
-  	transition: transform .2s ease;
-  	transform: translate(-50%, -50%) scale(1);
-  }
-  */ }
-  #container textarea {
-    resize: none; }
-  #container .section {
-    height: 100vh; }
-    #container .section .list {
-      height: calc(100% - 40px);
-      padding-bottom: 40px;
-      overflow-y: scroll; }
-  #container .sidebar h2 {
-    text-align: center;
-    font-size: 24px;
-    text-shadow: 1px 1px 1px #ccc;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    border-bottom: 2px solid #000;
-    background: linear-gradient(to top left, #000, #404040);
-    color: #FFF; }
-  #container #rooms {
-    width: 202px;
-    float: left;
-    border-right: 1px solid #ccc;
-    position: relative; }
-    #container #rooms .room {
-      padding: 5px;
-      border-bottom: 1px solid #000;
-      height: 30px;
-      position: relative;
-      cursor: pointer;
-      font-style: italic; }
-      #container #rooms .room * {
-        display: inline-block; }
-      #container #rooms .room .room-name {
-        width: 160px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap; }
-      #container #rooms .room .connectionIndicator {
-        width: 15px;
-        height: 15px;
-        border: 1px solid #000;
-        border-radius: 50%;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 5px; }
-      #container #rooms .room .connectionIndicator.off {
-        background-color: #FFF; }
-      #container #rooms .room .connectionIndicator.on {
-        background-color: #00ff00; }
-    #container #rooms .room:hover {
-      background-color: #ebebeb; }
-    #container #rooms #newRoomButton {
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      text-align: center;
-      border-top: 1px solid #000;
-      padding: 10px 0;
-      background: repeating-linear-gradient(-45deg, #FFF, #FFF 10px, #eeeeee 10px, #eeeeee 20px);
-      cursor: pointer;
-      text-shadow: 1px 1px 1px #ccc; }
-    #container #rooms #newRoomButton:hover {
-      background: #eeeeee; }
-  #container #chat {
-    width: calc(100% - 404px);
+#container textarea {
+  resize: none; }
+#container .section {
+  height: 100vh; }
+  #container .section .list {
+    height: calc(100% - 40px);
+    padding-bottom: 40px;
+    overflow-y: scroll; }
+#container .sidebar h2 {
+  text-align: center;
+  font-size: 24px;
+  text-shadow: 1px 1px 1px #ccc;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #000;
+  background: linear-gradient(to top left, #000, #404040);
+  color: #FFF; }
+#container #rooms {
+  width: 202px;
+  float: left;
+  border-right: 1px solid #ccc;
+  position: relative; }
+  #container #rooms .room {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+    height: 30px;
     position: relative;
-    float: left; }
-    #container #chat .chat-container-input {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      border-top: 1px solid #000;
-      margin-bottom: 1px;
-      height: 38px; }
-      #container #chat .chat-container-input #chat-text {
-        font-size: 18px;
-        outline: 0;
-        float: left;
-        width: 80%;
-        height: 100%;
-        border: none;
-        padding: 8px; }
-      #container #chat .chat-container-input #chat-text:focus::-webkit-input-placeholder {
-        color: transparent; }
-      #container #chat .chat-container-input #chat-send {
-        background: linear-gradient(to top left, #000, #404040);
-        height: 100%;
-        width: 20%;
-        color: #FFF;
-        position: relative;
-        float: left;
-        cursor: pointer; }
-        #container #chat .chat-container-input #chat-send .chat-send-inner {
-          position: absolute;
-          top: calc(50% - 2px);
-          left: 50%;
-          transform: translate(-50%, -50%);
-          letter-spacing: 2px; }
-      #container #chat .chat-container-input #chat-send:hover .chat-send-inner {
-        top: calc(50% - 1px);
-        border-bottom: 2px solid #FFF; }
-    #container #chat .chat-container-messages {
-      position: relative;
-      height: calc(100% - 39px);
-      padding-bottom: 0; }
-      #container #chat .chat-container-messages .chat-container-inner {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0; }
-        #container #chat .chat-container-messages .chat-container-inner .chat-line {
-          padding: 5px 10px; }
-          #container #chat .chat-container-messages .chat-container-inner .chat-line .from {
-            font-weight: bold; }
-          #container #chat .chat-container-messages .chat-container-inner .chat-line .colon {
-            margin-right: 4px; }
-        #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg {
-          background-color: #ccc; }
-          #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .from, #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .colon {
-            display: none; }
-  #container #users {
-    width: 202px;
-    float: right;
-    border-left: 1px solid #ccc; }
-    #container #users .user-name {
-      padding: 3px 5px;
+    cursor: pointer;
+    font-style: italic; }
+    #container #rooms .room * {
+      display: inline-block; }
+    #container #rooms .room .room-name {
+      width: 160px;
       text-overflow: ellipsis;
       overflow: hidden;
       white-space: nowrap; }
-    #container #users .user-name.you {
-      color: #FFF;
-      background-color: #00c0ff; }
-  #container #prompt {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: radial-gradient(circle at 50% calc(50% - 180px), rgba(100, 100, 100, 0.5), rgba(0, 0, 0, 0.6)); }
-    #container #prompt .prompt-box {
+    #container #rooms .room .connectionIndicator {
+      width: 15px;
+      height: 15px;
+      border: 1px solid #000;
+      border-radius: 50%;
       position: absolute;
-      top: calc(50% - 200px);
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 600px;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 5px; }
+    #container #rooms .room .connectionIndicator.off {
+      background-color: #FFF; }
+    #container #rooms .room .connectionIndicator.on {
+      background-color: #00ff00; }
+  #container #rooms .room:hover {
+    background-color: #ebebeb; }
+  #container #rooms #newRoomButton {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    border-top: 1px solid #000;
+    padding: 10px 0;
+    background: repeating-linear-gradient(-45deg, #FFF, #FFF 10px, #eeeeee 10px, #eeeeee 20px);
+    cursor: pointer;
+    text-shadow: 1px 1px 1px #ccc; }
+  #container #rooms #newRoomButton:hover {
+    background: #eeeeee; }
+#container #chat {
+  width: calc(100% - 404px);
+  position: relative;
+  float: left; }
+  #container #chat .chat-container-input {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px solid #000;
+    margin-bottom: 1px;
+    height: 38px; }
+    #container #chat .chat-container-input #chat-text {
+      font-size: 18px;
+      outline: 0;
+      float: left;
+      width: 80%;
+      height: 100%;
+      border: none;
+      padding: 8px; }
+    #container #chat .chat-container-input #chat-text:focus::-webkit-input-placeholder {
+      color: transparent; }
+    #container #chat .chat-container-input #chat-send {
       background: linear-gradient(to top left, #000, #404040);
-      text-align: center;
-      padding: 30px 20px 25px 20px;
-      border-radius: 5px;
+      height: 100%;
+      width: 20%;
       color: #FFF;
-      box-shadow: 2px 2px 8px #000; }
-      #container #prompt .prompt-box .prompt-question {
-        font-size: 18px;
-        margin-bottom: 15px; }
-      #container #prompt .prompt-box .prompt-input {
-        display: block;
-        border-radius: 1px;
-        border: 0;
-        padding: 6px;
-        width: 80%;
-        margin-left: 50%;
-        transform: translateX(-50%);
-        font-size: 16px;
-        outline: 0; }
-      #container #prompt .prompt-box .prompt-input:focus::-webkit-input-placeholder, #container #prompt .prompt-box .prompt-input:focus::-moz-placeholder, #container #prompt .prompt-box .prompt-input:focus:-moz-placeholder, #container #prompt .prompt-box .prompt-input:focus:-ms-input-placeholder {
-        color: transparent; }
-      #container #prompt .prompt-box .prompt-submit {
-        display: inline-block;
-        font-size: 20px;
-        font-weight: lighter;
-        letter-spacing: 1px;
-        margin-top: 15px;
-        margin-bottom: 1px;
-        padding: 0 10px 4px 10px;
-        cursor: pointer; }
-      #container #prompt .prompt-box .prompt-submit:hover {
-        border-bottom: 1px solid #FFF;
-        margin-bottom: 0; }
-  #container #prompt.active {
-    display: block; }
-  #container #prompt.inactive, #container #prompt:not(.active) {
-    display: none; }
-  #container #prompt[data-type="user"] #highlight {
-    color: #00c0ff; }
-  #container #prompt[data-type="room"] #highlight {
-    color: #00f900; }
+      position: relative;
+      float: left;
+      cursor: pointer; }
+      #container #chat .chat-container-input #chat-send .chat-send-inner {
+        position: absolute;
+        top: calc(50% - 2px);
+        left: 50%;
+        transform: translate(-50%, -50%);
+        letter-spacing: 2px; }
+    #container #chat .chat-container-input #chat-send:hover .chat-send-inner {
+      top: calc(50% - 1px);
+      border-bottom: 2px solid #FFF; }
+  #container #chat .chat-container-messages {
+    position: relative;
+    height: calc(100% - 39px);
+    padding-bottom: 0; }
+    #container #chat .chat-container-messages .chat-container-inner {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0; }
+      #container #chat .chat-container-messages .chat-container-inner .chat-line {
+        padding: 5px 10px; }
+        #container #chat .chat-container-messages .chat-container-inner .chat-line .from {
+          font-weight: bold; }
+        #container #chat .chat-container-messages .chat-container-inner .chat-line .colon {
+          margin-right: 4px; }
+      #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg {
+        background-color: #ccc; }
+        #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .from, #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .colon {
+          display: none; }
+#container #users {
+  width: 202px;
+  float: right;
+  border-left: 1px solid #ccc; }
+  #container #users .user-name {
+    padding: 3px 5px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap; }
+  #container #users .user-name.you {
+    color: #FFF;
+    background-color: #00c0ff; }
+#container .prompt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at 50% calc(50% - 180px), rgba(100, 100, 100, 0.5), rgba(0, 0, 0, 0.6)); }
+  #container .prompt .prompt-box {
+    position: absolute;
+    top: calc(50% - 200px);
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px;
+    background: linear-gradient(to top left, #000, #404040);
+    text-align: center;
+    padding: 30px 20px 25px 20px;
+    border-radius: 5px;
+    color: #FFF;
+    box-shadow: 2px 2px 8px #000; }
+    #container .prompt .prompt-box .prompt-question {
+      font-size: 18px;
+      margin-bottom: 15px; }
+    #container .prompt .prompt-box .prompt-input {
+      display: block;
+      border-radius: 1px;
+      border: 0;
+      padding: 6px;
+      width: 80%;
+      margin-left: 50%;
+      transform: translateX(-50%);
+      font-size: 16px;
+      outline: 0; }
+    #container .prompt .prompt-box .prompt-input:focus::-webkit-input-placeholder, #container .prompt .prompt-box .prompt-input:focus::-moz-placeholder, #container .prompt .prompt-box .prompt-input:focus:-moz-placeholder, #container .prompt .prompt-box .prompt-input:focus:-ms-input-placeholder {
+      color: transparent; }
+    #container .prompt .prompt-box .prompt-submit {
+      display: inline-block;
+      font-size: 20px;
+      font-weight: lighter;
+      letter-spacing: 1px;
+      margin-top: 15px;
+      margin-bottom: 1px;
+      padding: 0 10px 4px 10px;
+      cursor: pointer; }
+    #container .prompt .prompt-box .prompt-submit:hover {
+      border-bottom: 1px solid #FFF;
+      margin-bottom: 0; }
+#container .prompt:not(.active) {
+  display: none; }
+#container .prompt.active {
+  display: block; }
+#container .prompt#prompt-user #highlight {
+  color: #00c0ff; }
+#container .prompt#prompt-room #highlight {
+  color: #00f900; }
 
 #templates {
   display: none; }

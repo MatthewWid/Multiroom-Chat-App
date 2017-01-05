@@ -6,9 +6,9 @@
 
 		<link rel="stylesheet" type="text/css" href="css/index.css" />
 		
-		<!--<script src="/socket.io/socket.io.js"></script>-->
+		<script src="/socket.io/socket.io.js"></script>
 		<script src="js/client.js" defer></script>
-		<script src="js/server-events.js" defer></script>
+		<script src="js/client-server.js" defer></script>
 	</head>
 
 	<body>
@@ -38,11 +38,18 @@
 				
 				<div class="list"></div>
 			</div>
-			<div id="prompt" class="inactive" data-type="user">
+			<div id="prompt-user" class="prompt">
 				<div class="prompt-box">
 					<div class="prompt-question">Please enter a <span id="highlight">username</span>.</div>
-					<input type="text" class="prompt-input" placeholder="Name" id="prompt-input" />
-					<div class="prompt-submit" id="prompt-submit">SUBMIT</div>
+					<input type="text" class="prompt-input" placeholder="Name" id="prompt-user-input" />
+					<div class="prompt-submit" id="prompt-user-submit">SUBMIT</div>
+				</div>
+			</div>
+			<div id="prompt-room" class="prompt">
+				<div class="prompt-box">
+					<div class="prompt-question">Please enter a <span id="highlight">room</span>.</div>
+					<input type="text" class="prompt-input" placeholder="Name" id="prompt-room-input" />
+					<div class="prompt-submit" id="prompt-room-submit">SUBMIT</div>
 				</div>
 			</div>
 		</div>

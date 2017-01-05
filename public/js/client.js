@@ -4,20 +4,7 @@ var globals = {
 		roomIDPrefix: "rid-",
 		userIDPrefix: "uid-"
 	},
-	evt: {
-		setUsername: function(name) {
-
-		},
-		usernamePrompt: function() {
-
-		},
-		createChat: function(name) {
-
-		},
-		chatroomPrompt: function() {
-
-		}
-	}
+	username: ""
 };
 var rooms = {
 	el: {
@@ -103,8 +90,31 @@ var users = {
 		}
 	}
 };
+var prompt = {
+	el: {
+		user: document.getElementById("prompt-user"),
+		room: document.getElementById("prompt-room")
+	},
+	evt: {
+		toggleActive: function(promptEl) {
+			promptEl.classList.toggle("active");
+		}
+	}
+};
 
-// Event listeners from client events
+// Event listeners
+document.getElementById("prompt-user-submit").addEventListener("click", function() {
+	var inputVal = document.getElementById("prompt-user-input");
+	var name = inputVal.value ? inputVal.value.substring(0, 25) : ("Guest-" + Math.floor((Math.random() * 1000) + 1));
+	sendUsername(name);
+	inputVal.value = "";
+	prompt.evt.toggleActive(prompt.el.user);
+	globals.username = name;
+	users.evt.add({
+		name: globals.username,
+		you: true
+	});
+});
 
 // Sample data to view as an example
 var userData = [

@@ -194,7 +194,7 @@ $backgroundGradient: linear-gradient(to top left, #000, #404040);
 		    //background: linear-gradient(to right, rgb(235, 235, 235), rgb(250, 250, 250));
 		}
 	}
-	#prompt {
+	.prompt {
 		position: absolute;
 		top: 0;
 		left: 0;
@@ -206,7 +206,7 @@ $backgroundGradient: linear-gradient(to top left, #000, #404040);
 			position: absolute;
 			top: calc(50% - 200px);
 			left: 50%;
-			transform: translate(-50%, -50%); //scale(0);
+			transform: translate(-50%, -50%);
 			width: 600px;
 			background: $backgroundGradient;
 			text-align: center;
@@ -249,22 +249,16 @@ $backgroundGradient: linear-gradient(to top left, #000, #404040);
 			}
 		}
 	}
-	#prompt.active {
-		display: block;
-	}
-	/*
-	#prompt.active .prompt-box {
-		transition: transform .2s ease;
-		transform: translate(-50%, -50%) scale(1);
-	}
-	*/
-	#prompt.inactive, #prompt:not(.active) {
+	.prompt:not(.active) {
 		display: none;
 	}
-	#prompt[data-type="user"] #highlight {
+	.prompt.active {
+		display: block;
+	}
+	.prompt#prompt-user #highlight {
 		color: #00c0ff;
 	}
-	#prompt[data-type="room"] #highlight {
+	.prompt#prompt-room #highlight {
 		color: #00f900;
 	}
 }
