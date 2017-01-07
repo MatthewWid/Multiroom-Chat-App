@@ -80,7 +80,10 @@ var users = {
 		},
 		addAll: function(data) {
 			for (var i = 0; i < data.length; i++) {
-				users.evt.add(data[i]);
+				console.log(data[i]);
+				users.evt.add({
+					name: data[i]
+				});
 			}
 		},
 		removeAll: function() {
@@ -105,7 +108,7 @@ var prompt = {
 // Event listeners
 document.getElementById("prompt-user-submit").addEventListener("click", function() {
 	var inputVal = document.getElementById("prompt-user-input");
-	var name = inputVal.value ? inputVal.value.substring(0, 25) : ("Guest-" + Math.floor((Math.random() * 1000) + 1));
+	var name = inputVal.value ? inputVal.value.substring(0, 25) : ("Guest-" + ("0" + Math.floor((Math.random() * 1000) + 1)).slice(-4));
 	sendUsername(name);
 	inputVal.value = "";
 	prompt.evt.toggleActive(prompt.el.user);
@@ -115,8 +118,22 @@ document.getElementById("prompt-user-submit").addEventListener("click", function
 		you: true
 	});
 });
+document.getElementById("prompt-room-submit").addEventListener("click", function() {
+	var inputVal = document.getElementById("prompt-room-input");
+	var name = inputVal.value ? inputVal.value.substring(0, 25) : ("Room-" + Math.floor((Math.random() * 10) + 1));
+	sendRoom(name);
+	inputVal.value = "";
+	prompt.evt.toggleActive(prompt.el.room);
+	rooms.evt.add({
+		name: name,
+		preConnect: true
+	});
+});
+document.getElementById("createRoomButton").addEventListener("click", function() {
+	prompt.evt.toggleActive(prompt.el.room);
+});
 
-// Sample data to view as an example
+/* Sample data to view as an example
 var userData = [
 	{
 		name: "Nello"
@@ -190,3 +207,4 @@ var chatData = [
 	}
 ];
 chat.evt.addAll(chatData);
+*/
