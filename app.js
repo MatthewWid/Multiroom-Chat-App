@@ -1,3 +1,15 @@
+/*
+
+	THE FLYING *SPAGHETTI* MONSTER WOULD BE PROUD OF THIS CODE.
+
+*/
+
+/*
+
+	- TODO: When there are no users left in a room - remove the room.
+
+*/
+
 // Server init vars
 var express = require("express");
 var app = express();
@@ -30,13 +42,25 @@ function sendMessage(roomName, message, socket, server) {
 	});
 }
 function joinRoom(roomName, socket) {
-	for (var i = 0; i < allRooms.length; i++) {
-		if (allRooms[i].name == roomName) {
-			socket.join(roomName);
-			allRooms[i].users.push(socket);
-			sendMessage(roomName, (socket.username + " has joined the room."), socket, true);
-			socket.connectedTo = roomName;
-			console.log((socket.username ? socket.username : "User") + " has joined room called " + allRooms[i].name);
+	if (roomName != socket.connectedTo) {
+		for (var i = 0; i < allRooms.length; i++) {
+			if (allRooms[i].name == roomName) {
+				if (socket.connectedTo) {
+					for (var b = 0; b < allRooms[i].users.length; b++) {
+						if (allRooms[i].users[b].username == socket.username) {
+							allRooms[i].users[b].splice(b, 1);
+						}
+					}
+					socket.broadcast.emit("user-left", socket.username);
+					socket.leave(socket.connectedTo);
+				}
+				socket.join(roomName);
+				socket.emit("room-joined", roomName);
+				allRooms[i].users.push(socket);
+				sendMessage(roomName, (socket.username + " has joined the room."), socket, true);
+				socket.connectedTo = roomName;
+				console.log((socket.username ? socket.username : "User") + " has joined room called " + allRooms[i].name);
+			}
 		}
 	}
 }
@@ -97,14 +121,13 @@ io.on("connection", function(socket) {
 
 	socket.on("disconnect", function() {
 		console.log((socket.username ? socket.username : "User") + " has disconnected");
-		socket.broadcast.emit("user-left", socket.username);
 		for (var i = 0; i < allUsers.length; i++) {
 			if (allUsers[i].username === socket.username) {
 				allUsers.splice(i, 1);
 			}
 		}
 		if (socket.connectedTo) {
-			sendMessage(roomName, (socket.username + " has left the room."), socket, true);
+			socket.broadcast.emit("user-left", socket.username);
 		}
 	});
 });

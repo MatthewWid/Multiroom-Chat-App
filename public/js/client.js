@@ -1,3 +1,10 @@
+/*
+
+	- When user joins the room they are already in the connectionIndicator for that room turns off as if they left.
+	- TODO: Makes "Users here now" only display clients in current room, not in entire server
+
+*/
+
 // Objects for events, functions, interactable elements and templates
 var globals = {
 	roomIDPrefix: "rid-",
@@ -75,7 +82,7 @@ var rooms = {
 			var allRooms = rooms.el.list.getElementsByClassName("room");
 			for (var i = 0; i < allRooms.length; i++) {
 				allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.remove("on");
-				if (allRooms[i].id === globals.roomIDPrefix + data) {
+				if (allRooms[i].id == globals.roomIDPrefix + data.name) {
 					allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.add("on");
 				}
 			}
@@ -155,7 +162,6 @@ document.getElementById("prompt-room-submit").addEventListener("click", function
 		name: name,
 		preConnect: true
 	});
-	chat.evt.removeAll();
 });
 document.getElementById("newRoomButton").addEventListener("click", function() {
 	prompt.evt.toggleActive(prompt.el.room);

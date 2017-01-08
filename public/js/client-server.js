@@ -12,7 +12,6 @@ function sendRoom(name) {
 function joinRoom(name) {
 	socket.emit("joinRoom", name);
 	rooms.evt.join(name);
-	chat.evt.removeAll();
 }
 function sendMessage(msg) {
 	socket.emit("sendMsg", msg);
@@ -42,6 +41,11 @@ socket.on("user-joined", function(data) {
 	});
 });
 socket.on("user-left", function(data) {
+	chat.evt.add({
+		from: "",
+		msg: data + " has left the room.",
+		serverMsg: true
+	});
 	users.evt.remove({
 		name: data
 	});
@@ -62,9 +66,9 @@ socket.on("room-joined", function(data) {
 	rooms.evt.join({
 		name: data
 	});
+	chat.evt.removeAll();
 });
 
 socket.on("chat-message", function(data) {
-	console.log(data);
 	chat.evt.add(data);
 });
