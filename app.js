@@ -22,20 +22,48 @@ function checkTaken(name, array) {
 	}
 	return false;
 }
+function sendMessage(roomName, message, socket, server) {
+	io.in(roomName).emit("chat-message", {
+		from: socket.username ? socket.username : "",
+		msg: message,
+		serverMsg: server
+	});
+}
+function joinRoom(roomName, socket) {
+	for (var i = 0; i < allRooms.length; i++) {
+		if (allRooms[i].name == roomName) {
+			socket.join(roomName);
+			allRooms[i].users.push(socket);
+			sendMessage(roomName, (socket.username + " has joined the room."), socket, true);
+			socket.connectedTo = roomName;
+			console.log((socket.username ? socket.username : "User") + " has joined room called " + allRooms[i].name);
+		}
+	}
+}
+
 // Events and logic
 io.on("connection", function(socket) {
 	console.log((socket.username ? socket.username : "User") + " joined");
+	
 	var allNames = [];
 	for(var i = 0; i < allUsers.length; i++) {
 		allNames.push(allUsers[i].username);
 	}
 	socket.emit("user-all", allNames);
+	var allRoomNames = [];
+	for(var i = 0; i < allRooms.length; i++) {
+		allRoomNames.push(allRooms[i].name);
+	}
+	socket.emit("room-all", allRoomNames);
 	socket.emit("reqUsername");
 
 	socket.on("newName", function(data) {
 		if (checkTaken(data, allUsers)) {
 			console.log((socket.username ? socket.username : "User") + " attempted to change their name to " + data + " but it was taken");
-			socket.emit("reqUsername", "taken");
+			socket.emit("reqUsername", {
+				taken: true,
+				rejectedUsername: data
+			});
 		} else {
 			console.log((socket.username ? socket.username : "User") + " has changed their name to " + data);
 			socket.username = data;
@@ -55,9 +83,16 @@ io.on("connection", function(socket) {
 				name: data,
 				users: []
 			});
-			socket.broadcast.emit("room-created", data);
 			console.log((socket.username ? socket.username : "User") + " has created room called " + data);
+			joinRoom(data, socket);
+			socket.broadcast.emit("room-created", data);
 		}
+	});
+	socket.on("joinRoom", function(data) {
+		joinRoom(data, socket);
+	});
+	socket.on("sendMsg", function(data) {
+		sendMessage(socket.connectedTo, data, socket, false);
 	});
 
 	socket.on("disconnect", function() {
@@ -67,6 +102,9 @@ io.on("connection", function(socket) {
 			if (allUsers[i].username === socket.username) {
 				allUsers.splice(i, 1);
 			}
+		}
+		if (socket.connectedTo) {
+			sendMessage(roomName, (socket.username + " has left the room."), socket, true);
 		}
 	});
 });

@@ -50,8 +50,7 @@ body, textarea {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      right: 5px; }
-    #container #rooms .room .connectionIndicator.off {
+      right: 5px;
       background-color: #FFF; }
     #container #rooms .room .connectionIndicator.on {
       background-color: #00ff00; }

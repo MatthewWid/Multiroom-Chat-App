@@ -1,37 +1,8 @@
 // Objects for events, functions, interactable elements and templates
 var globals = {
-	config: {
-		roomIDPrefix: "rid-",
-		userIDPrefix: "uid-"
-	},
+	roomIDPrefix: "rid-",
+	userIDPrefix: "uid-",
 	username: ""
-};
-var rooms = {
-	el: {
-		list: document.querySelector("#rooms .list"),
-		template: document.getElementById("template-room")
-	},
-	evt: {
-		add: function(data) {
-			var newRoomEl = rooms.el.template.cloneNode(true);
-			newRoomEl.setAttribute("id", globals.config.roomIDPrefix + data.name);
-			newRoomEl.title = data.name;
-			newRoomEl.getElementsByClassName("room-name")[0].innerHTML = data.name;
-			if (data.preConnect) {
-				newRoomEl.getElementsByClassName("connectionIndicator")[0].classList.toggle("on");
-			}
-			rooms.el.list.appendChild(newRoomEl);
-		},
-		remove: function(data) {
-			var roomElToRemove = document.getElementById(globals.config.roomIDPrefix + data.name);
-			roomElToRemove.parentElement.removeChild(roomElToRemove);
-		},
-		addAll: function(data) {
-			for (var i = 0; i < data.length; i++) {
-				rooms.evt.add(data[i]);
-			}
-		}
-	}
 };
 var chat = {
 	el: {
@@ -44,16 +15,69 @@ var chat = {
 		add: function(data) {
 			var msgEl = chat.el.template.cloneNode(true);
 			msgEl.removeAttribute("id");
-			msgEl.getElementsByClassName("from")[0].innerHTML = data.from || "";
-			msgEl.getElementsByClassName("message")[0].innerHTML = data.msg;
+			msgEl.getElementsByClassName("from")[0].textContent = data.from || "";
 			if (data.serverMsg) {
 				msgEl.classList.add("serverMsg");
+				msgEl.getElementsByClassName("message")[0].innerHTML = data.msg;
+			} else {
+				msgEl.getElementsByClassName("message")[0].textContent = data.msg;
 			}
 			chat.el.list.appendChild(msgEl);
 		},
 		addAll: function(data) {
 			for (var i = 0; i < data.length; i++) {
 				chat.evt.add(data[i]);
+			}
+		},
+		removeAll: function() {
+			while(chat.el.list.firstChild) {
+				chat.el.list.removeChild(chat.el.list.firstChild);
+			}
+		},
+		send: function() {
+			var msg = chat.el.textBox.value;
+			sendMessage(msg);
+			chat.el.textBox.value = "";
+		}
+	}
+};
+var rooms = {
+	el: {
+		list: document.querySelector("#rooms .list"),
+		template: document.getElementById("template-room")
+	},
+	evt: {
+		add: function(data) {
+			var newRoomEl = rooms.el.template.cloneNode(true);
+			newRoomEl.setAttribute("id", globals.roomIDPrefix + data.name);
+			newRoomEl.title = data.name;
+			newRoomEl.getElementsByClassName("room-name")[0].innerHTML = data.name;
+			if (data.preConnect) {
+				newRoomEl.getElementsByClassName("connectionIndicator")[0].classList.toggle("on");
+			}
+			newRoomEl.addEventListener("click", function() {
+				joinRoom(data.name);
+			});
+			rooms.el.list.appendChild(newRoomEl);
+		},
+		remove: function(data) {
+			var roomElToRemove = document.getElementById(globals.roomIDPrefix + data.name);
+			roomElToRemove.parentElement.removeChild(roomElToRemove);
+		},
+		addAll: function(data) {
+			for (var i = 0; i < data.length; i++) {
+				rooms.evt.add({
+					name: data[i]
+				});
+			}
+		},
+		join: function(data) {
+			var allRooms = rooms.el.list.getElementsByClassName("room");
+			for (var i = 0; i < allRooms.length; i++) {
+				allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.remove("on");
+				if (allRooms[i].id === globals.roomIDPrefix + data) {
+					allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.add("on");
+				}
 			}
 		}
 	}
@@ -66,7 +90,7 @@ var users = {
 	evt: {
 		add: function(data) {
 			var newUserEl = document.getElementById("template-user-name").cloneNode(true);
-			newUserEl.setAttribute("id", globals.config.userIDPrefix + data.name);
+			newUserEl.setAttribute("id", globals.userIDPrefix + data.name);
 			newUserEl.title = newUserEl.innerHTML = data.name;
 			if (data.you) {
 				newUserEl.classList.add("you");
@@ -74,13 +98,16 @@ var users = {
 			users.el.list.appendChild(newUserEl);
 		},
 		remove: function(data) {
-			console.log(data);
-			var userElToRemove = document.getElementById(globals.config.userIDPrefix + data.name);
-			userElToRemove.parentElement.removeChild(userElToRemove);
+			if (!data.you) {
+				var userElToRemove = document.getElementById(globals.userIDPrefix + data.name);
+				userElToRemove.parentElement.removeChild(userElToRemove);
+			} else {
+				var userElToRemove = document.querySelector("#users .list .you");
+				userElToRemove.parentElement.removeChild(userElToRemove);
+			}
 		},
 		addAll: function(data) {
 			for (var i = 0; i < data.length; i++) {
-				console.log(data[i]);
 				users.evt.add({
 					name: data[i]
 				});
@@ -109,8 +136,8 @@ var prompt = {
 document.getElementById("prompt-user-submit").addEventListener("click", function() {
 	var inputVal = document.getElementById("prompt-user-input");
 	var name = inputVal.value ? inputVal.value.substring(0, 25) : ("Guest-" + ("0" + Math.floor((Math.random() * 1000) + 1)).slice(-4));
-	sendUsername(name);
 	inputVal.value = "";
+	sendUsername(name);
 	prompt.evt.toggleActive(prompt.el.user);
 	globals.username = name;
 	users.evt.add({
@@ -120,18 +147,35 @@ document.getElementById("prompt-user-submit").addEventListener("click", function
 });
 document.getElementById("prompt-room-submit").addEventListener("click", function() {
 	var inputVal = document.getElementById("prompt-room-input");
-	var name = inputVal.value ? inputVal.value.substring(0, 25) : ("Room-" + Math.floor((Math.random() * 10) + 1));
-	sendRoom(name);
+	var name = inputVal.value ? inputVal.value.substring(0, 25) : ("Room-" + ("0" + Math.floor((Math.random() * 1000) + 1)).slice(-4));
 	inputVal.value = "";
+	sendRoom(name);
 	prompt.evt.toggleActive(prompt.el.room);
 	rooms.evt.add({
 		name: name,
 		preConnect: true
 	});
+	chat.evt.removeAll();
 });
-document.getElementById("createRoomButton").addEventListener("click", function() {
+document.getElementById("newRoomButton").addEventListener("click", function() {
 	prompt.evt.toggleActive(prompt.el.room);
 });
+chat.el.sendButton.addEventListener("click", function() {
+	chat.evt.send();
+});
+
+chat.evt.addAll([
+	{
+		from: "",
+		msg: "Welcome to <b>Chatter</b>!",
+		serverMsg: true
+	},
+	{
+		from: "",
+		msg: "Click \"Create room\" to make a new room, or join an existing room on the right!",
+		serverMsg: true
+	}
+]);
 
 /* Sample data to view as an example
 var userData = [

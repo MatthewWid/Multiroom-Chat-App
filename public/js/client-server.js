@@ -9,11 +9,23 @@ function sendUsername(name) {
 function sendRoom(name) {
 	socket.emit("newRoom", name);
 }
+function joinRoom(name) {
+	socket.emit("joinRoom", name);
+	rooms.evt.join(name);
+	chat.evt.removeAll();
+}
+function sendMessage(msg) {
+	socket.emit("sendMsg", msg);
+}
 
 // Receive from server functions
 socket.on("reqUsername", function(data) {
-	if (data === "taken") {
-		alert("That username is taken!");
+	if (data ? data.taken : false) {
+		alert("The username " + data.rejectedUsername + " is taken");
+		users.evt.remove({
+			name: data.rejectedUsername,
+			you: true
+		});
 	}
 	prompt.evt.toggleActive(prompt.el.user);
 });
@@ -34,8 +46,25 @@ socket.on("user-left", function(data) {
 		name: data
 	});
 });
-window.testArr = [];
 socket.on("user-all", function(data) {
-	window.testArr = data;
 	users.evt.addAll(data);
-})
+});
+
+socket.on("room-created", function(data) {
+	rooms.evt.add({
+		name: data
+	});
+});
+socket.on("room-all", function(data) {
+	rooms.evt.addAll(data);
+});
+socket.on("room-joined", function(data) {
+	rooms.evt.join({
+		name: data
+	});
+});
+
+socket.on("chat-message", function(data) {
+	console.log(data);
+	chat.evt.add(data);
+});
