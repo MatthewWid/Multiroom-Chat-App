@@ -1,12 +1,11 @@
 /*
-
-	THE FLYING *SPAGHETTI* MONSTER WOULD BE PROUD OF THIS CODE.
-
+	Bless this mess (of code).
 */
 
 /*
 
 	- TODO: When there are no users left in a room - remove the room.
+	- TODO: Make user joins to rooms not appear to every other room.
 
 */
 
@@ -28,7 +27,7 @@ var allRooms = [];
 
 function checkTaken(name, array) {
 	for (var i = 0; i < array.length; i++) {
-		if (name === (array[i].username ? array[i].username : array[i].name)) {
+		if (name === (array[i].username ? array[i].username : array[i].name) || name === "global") {
 			return true;
 		}
 	}
@@ -68,7 +67,9 @@ function joinRoom(roomName, socket) {
 // Events and logic
 io.on("connection", function(socket) {
 	console.log((socket.username ? socket.username : "User") + " joined");
-	
+	socket.join("global");
+	//console.log(socket.rooms);
+
 	var allNames = [];
 	for(var i = 0; i < allUsers.length; i++) {
 		allNames.push(allUsers[i].username);
@@ -92,7 +93,7 @@ io.on("connection", function(socket) {
 			console.log((socket.username ? socket.username : "User") + " has changed their name to " + data);
 			socket.username = data;
 			allUsers.push(socket);
-			socket.broadcast.emit("user-joined", socket.username);
+			socket.broadcast.to("global").emit("user-joined", socket.username);
 			if (allRooms.length == 0) {
 				socket.emit("reqRoom");
 			}
@@ -114,6 +115,7 @@ io.on("connection", function(socket) {
 	});
 	socket.on("joinRoom", function(data) {
 		joinRoom(data, socket);
+		//console.log(socket.rooms);
 	});
 	socket.on("sendMsg", function(data) {
 		sendMessage(socket.connectedTo, data, socket, false);

@@ -122,6 +122,8 @@ body, textarea {
           font-weight: bold; }
         #container #chat .chat-container-messages .chat-container-inner .chat-line .colon {
           margin-right: 4px; }
+        #container #chat .chat-container-messages .chat-container-inner .chat-line .message {
+          word-break: break-word; }
       #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg {
         background-color: #ccc; }
         #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .from, #container #chat .chat-container-messages .chat-container-inner .chat-line.serverMsg .colon {

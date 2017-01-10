@@ -160,6 +160,9 @@ $backgroundGradient: linear-gradient(to top left, #000, #404040);
 					.colon {
 						margin-right: 4px;
 					}
+					.message {
+						word-break: break-word;
+					}
 				}
 				.chat-line.serverMsg {
 					background-color: #ccc;
