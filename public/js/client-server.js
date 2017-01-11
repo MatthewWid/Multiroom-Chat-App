@@ -39,6 +39,11 @@ socket.on("user-joined", function(data) {
 	users.evt.add({
 		name: data
 	});
+	chat.evt.add({
+		from: "",
+		msg: data + " has joined the room.",
+		serverMsg: true
+	});
 });
 socket.on("user-left", function(data) {
 	chat.evt.add({
@@ -64,9 +69,17 @@ socket.on("room-all", function(data) {
 });
 socket.on("room-joined", function(data) {
 	rooms.evt.join({
-		name: data
+		name: data.name
 	});
 	chat.evt.removeAll();
+	chat.evt.add({
+		from: "",
+		msg: globals.username + " has joined the room.",
+		serverMsg: true
+	});
+	users.evt.removeAll();
+	users.evt.addAll(data.users);
+	console.log(data.users);
 });
 
 socket.on("chat-message", function(data) {

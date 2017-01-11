@@ -50,15 +50,26 @@ function joinRoom(roomName, socket) {
 							allRooms[i].users[b].splice(b, 1);
 						}
 					}
+					console.log(socket.connectedTo);
 					socket.broadcast.emit("user-left", socket.username);
 					socket.leave(socket.connectedTo);
 				}
+				socket.leave("global");
 				socket.join(roomName);
-				socket.emit("room-joined", roomName);
 				allRooms[i].users.push(socket);
-				sendMessage(roomName, (socket.username + " has joined the room."), socket, true);
+				var usersArr = [];
+				for (var b = 0; b < allRooms[i].users.length; b++) {
+					console.log(allRooms[i].users[b].username);
+					usersArr.push(allRooms[i].users[b].username);
+				}
+				socket.emit("room-joined", {
+					name: roomName,
+					users: usersArr
+				});
 				socket.connectedTo = roomName;
+				socket.broadcast.to(roomName).emit("user-joined", socket.username);
 				console.log((socket.username ? socket.username : "User") + " has joined room called " + allRooms[i].name);
+				console.log(socket.connectedTo);
 			}
 		}
 	}
@@ -68,7 +79,6 @@ function joinRoom(roomName, socket) {
 io.on("connection", function(socket) {
 	console.log((socket.username ? socket.username : "User") + " joined");
 	socket.join("global");
-	//console.log(socket.rooms);
 
 	var allNames = [];
 	for(var i = 0; i < allUsers.length; i++) {
@@ -115,7 +125,6 @@ io.on("connection", function(socket) {
 	});
 	socket.on("joinRoom", function(data) {
 		joinRoom(data, socket);
-		//console.log(socket.rooms);
 	});
 	socket.on("sendMsg", function(data) {
 		sendMessage(socket.connectedTo, data, socket, false);

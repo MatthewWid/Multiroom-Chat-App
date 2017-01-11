@@ -116,7 +116,8 @@ var users = {
 		addAll: function(data) {
 			for (var i = 0; i < data.length; i++) {
 				users.evt.add({
-					name: data[i]
+					name: data[i],
+					you: data[i] == globals.username ? true : false
 				});
 			}
 		},
@@ -168,6 +169,12 @@ document.getElementById("newRoomButton").addEventListener("click", function() {
 });
 chat.el.sendButton.addEventListener("click", function() {
 	chat.evt.send();
+});
+chat.el.textBox.addEventListener("keypress", function(event) {
+	if (event.keyCode == 13) {
+		event.preventDefault();
+		chat.evt.send();
+	}
 });
 
 chat.evt.addAll([
