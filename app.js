@@ -5,7 +5,6 @@
 /*
 
 	- TODO: When there are no users left in a room - remove the room.
-	- TODO: Make user joins to rooms not appear to every other room.
 
 */
 
@@ -41,16 +40,19 @@ function sendMessage(roomName, message, socket, server) {
 	});
 }
 function joinRoom(roomName, socket) {
+	console.log("\n--- USER JOINING ---\n");
+	console.log(socket.connectedTo);
 	if (roomName != socket.connectedTo) {
 		for (var i = 0; i < allRooms.length; i++) {
-			if (allRooms[i].name == roomName) {
+			console.log("FOR");
+			if (allRooms[i].name == roomName) { // New room
 				if (socket.connectedTo) {
 					for (var b = 0; b < allRooms[i].users.length; b++) {
 						if (allRooms[i].users[b].username == socket.username) {
+							console.log("Removing user [" + socket.username + "] from room [" + allRooms[i].name + "]");
 							allRooms[i].users[b].splice(b, 1);
 						}
 					}
-					console.log(socket.connectedTo);
 					socket.broadcast.emit("user-left", socket.username);
 					socket.leave(socket.connectedTo);
 				}
@@ -59,7 +61,6 @@ function joinRoom(roomName, socket) {
 				allRooms[i].users.push(socket);
 				var usersArr = [];
 				for (var b = 0; b < allRooms[i].users.length; b++) {
-					console.log(allRooms[i].users[b].username);
 					usersArr.push(allRooms[i].users[b].username);
 				}
 				socket.emit("room-joined", {
@@ -69,10 +70,15 @@ function joinRoom(roomName, socket) {
 				socket.connectedTo = roomName;
 				socket.broadcast.to(roomName).emit("user-joined", socket.username);
 				console.log((socket.username ? socket.username : "User") + " has joined room called " + allRooms[i].name);
-				console.log(socket.connectedTo);
+			}
+			console.log(allRooms[i].name + ": " + allRooms[i].users.length);
+			if (allRooms[i].users.length == 0) {
+				io.emit("room-delete", allRooms[i].name);
+				allRooms.splice(i, 1);
 			}
 		}
 	}
+	console.log(socket.connectedTo);
 }
 
 // Events and logic
