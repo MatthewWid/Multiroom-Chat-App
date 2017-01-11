@@ -1,7 +1,6 @@
 /*
 
 	- When user joins the room they are already in the connectionIndicator for that room turns off as if they left.
-	- TODO: Makes "Users here now" only display clients in current room, not in entire server
 
 */
 

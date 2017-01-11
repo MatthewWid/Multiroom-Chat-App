@@ -81,6 +81,11 @@ socket.on("room-joined", function(data) {
 	users.evt.addAll(data.users);
 	console.log(data.users);
 });
+socket.on("room-delete", function(data) {
+	rooms.evt.remove({
+		name: data
+	});
+});
 
 socket.on("chat-message", function(data) {
 	chat.evt.add(data);
