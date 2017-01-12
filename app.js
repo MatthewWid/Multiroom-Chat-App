@@ -2,12 +2,6 @@
 	Bless this mess (of code).
 */
 
-/*
-
-	- TODO: When there are no users left in a room - remove the room.
-
-*/
-
 // Server init vars
 var express = require("express");
 var app = express();
@@ -26,65 +20,84 @@ var allRooms = [];
 
 function checkTaken(name, array) {
 	for (var i = 0; i < array.length; i++) {
-		if (name === (array[i].username ? array[i].username : array[i].name) || name === "global") {
+		if (name === (array[i].username ? array[i].username : array[i].name) || name == "global") {
 			return true;
 		}
 	}
 	return false;
 }
-function sendMessage(roomName, message, socket, server) {
+function sendMessage(roomName, message, socket, serverMsg) {
 	io.in(roomName).emit("chat-message", {
 		from: socket.username ? socket.username : "",
 		msg: message,
-		serverMsg: server
+		serverMsg: serverMsg
 	});
 }
-function joinRoom(roomName, socket) {
-	console.log("\n--- USER JOINING ---\n");
-	console.log(socket.connectedTo);
-	if (roomName != socket.connectedTo) {
-		for (var i = 0; i < allRooms.length; i++) {
-			console.log("FOR");
-			if (allRooms[i].name == roomName) { // New room
-				if (socket.connectedTo) {
-					for (var b = 0; b < allRooms[i].users.length; b++) {
-						if (allRooms[i].users[b].username == socket.username) {
-							console.log("Removing user [" + socket.username + "] from room [" + allRooms[i].name + "]");
-							allRooms[i].users[b].splice(b, 1);
-						}
-					}
-					socket.broadcast.emit("user-left", socket.username);
-					socket.leave(socket.connectedTo);
-				}
-				socket.leave("global");
-				socket.join(roomName);
-				allRooms[i].users.push(socket);
-				var usersArr = [];
-				for (var b = 0; b < allRooms[i].users.length; b++) {
-					usersArr.push(allRooms[i].users[b].username);
-				}
-				socket.emit("room-joined", {
-					name: roomName,
-					users: usersArr
-				});
-				socket.connectedTo = roomName;
-				socket.broadcast.to(roomName).emit("user-joined", socket.username);
-				console.log((socket.username ? socket.username : "User") + " has joined room called " + allRooms[i].name);
-			}
-			console.log(allRooms[i].name + ": " + allRooms[i].users.length);
-			if (allRooms[i].users.length == 0) {
-				io.emit("room-delete", allRooms[i].name);
-				allRooms.splice(i, 1);
+function joinRoom(room, socket) {
+	var lastRoom = socket.connectedTo;
+	var roomToJoin;
+	if (room.name == lastRoom.name || room.name == "global") { // If user is trying to join the room they're already in, reject the join
+		console.log("Rejecting join");
+		return false;
+	} else {
+		for (var b = 0; b < allRooms.length; b++) { // Iterate through all rooms
+			if (allRooms[b].name == room.name) { // If the room user is trying to join exists
+				roomToJoin = allRooms[b]; // Set the planned room to joined to the found rooms' object
 			}
 		}
+		if (roomToJoin) { // If there is a planned room to join
+			socket.leave("global"); // Leave default "global" sIO room
+
+			if (lastRoom) {
+				if ((lastRoom.users.length - 1) <= 0) { // If the old room would be empty if the user leaves, delete the old room
+					for (var i = 0; i < allRooms.length; i++) { // Iterate through all rooms
+						if (lastRoom.name == allRooms[i].name) { // If the old rooms name match the current iteration name
+							io.emit("room-delete", lastRoom.name); // Send event to clients to remove room from list of chat rooms
+							allRooms.splice(i, 1); // Remove the old room from the list of all rooms
+						}
+					}
+				} else { // If the user is leaving a room, send messages to the old room that the user has left
+					io.in(lastRoom.name).emit("user-left", socket.username);
+					sendMessage(lastRoom.name, (socket.username + " has left the room."), socket, true);
+					socket.leave(lastRoom.name);
+
+					// Remove user from old room's list of users
+					for (var i = 0; i < lastRoom.users.length; i++) {
+						if (lastRoom.users[i].username == socket.username) {
+							lastRoom.users.splice(i, 1);
+						}
+					}
+				}
+			}
+
+			// Join user to planned room
+			socket.join(roomToJoin.name);
+			roomToJoin.users.push(socket);
+
+			// Send all users in new room to user to render
+			var usersToSend = [];
+			for (var i = 0; i < roomToJoin.users.length; i++) {
+				usersToSend.push(roomToJoin.users[i].username);
+			}
+			socket.emit("room-joined", {
+				name: roomToJoin.name,
+				users: usersToSend
+			});
+
+			socket.broadcast.to(roomToJoin.name).emit("user-joined", socket.username); // Send event to client about user joining to add to user list
+			sendMessage(roomToJoin.name, (socket.username + " has joined the room"), socket, true); // Send message to users in new room that the user has joined
+			socket.connectedTo = roomToJoin; // Set users' currently connected room to the new rooms' object
+			console.log((socket.username ? socket.username : "User") + " has joined room called " + roomToJoin.name);
+		}
 	}
-	console.log(socket.connectedTo);
 }
 
 // Events and logic
 io.on("connection", function(socket) {
 	console.log((socket.username ? socket.username : "User") + " joined");
 	socket.join("global");
+	socket.connectedTo = false;
+	console.log(socket.connectedTo);
 
 	var allNames = [];
 	for(var i = 0; i < allUsers.length; i++) {
@@ -107,9 +120,9 @@ io.on("connection", function(socket) {
 			});
 		} else {
 			console.log((socket.username ? socket.username : "User") + " has changed their name to " + data);
-			socket.username = data;
+			socket.username = data.substring(0, 25);
 			allUsers.push(socket);
-			socket.broadcast.to("global").emit("user-joined", socket.username);
+			io.in("global").emit("user-joined", socket.username);
 			if (allRooms.length == 0) {
 				socket.emit("reqRoom");
 			}
@@ -120,20 +133,23 @@ io.on("connection", function(socket) {
 			socket.emit("reqRoom", "taken");
 			console.log((socket.username ? socket.username : "User") + " attempted to create room called " + data + " but it was taken");
 		} else {
-			allRooms.push({
+			var newRoom = {
 				name: data,
 				users: []
-			});
+			}
+			allRooms.push(newRoom);
 			console.log((socket.username ? socket.username : "User") + " has created room called " + data);
-			joinRoom(data, socket);
-			socket.broadcast.emit("room-created", data);
+			io.emit("room-created", data);
+			joinRoom(newRoom, socket);
 		}
 	});
 	socket.on("joinRoom", function(data) {
-		joinRoom(data, socket);
+		joinRoom({
+			name: data
+		}, socket);
 	});
 	socket.on("sendMsg", function(data) {
-		sendMessage(socket.connectedTo, data, socket, false);
+		sendMessage(socket.connectedTo.name, data.substring(0, 249), socket, false);
 	});
 
 	socket.on("disconnect", function() {

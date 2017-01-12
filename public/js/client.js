@@ -1,14 +1,45 @@
-/*
-
-	- When user joins the room they are already in the connectionIndicator for that room turns off as if they left.
-
-*/
-
 // Objects for events, functions, interactable elements and templates
 var globals = {
 	roomIDPrefix: "rid-",
 	userIDPrefix: "uid-",
 	username: ""
+};
+var rooms = {
+	el: {
+		list: document.querySelector("#rooms .list"),
+		template: document.getElementById("template-room")
+	},
+	evt: {
+		add: function(data) {
+			var newRoomEl = rooms.el.template.cloneNode(true);
+			newRoomEl.setAttribute("id", globals.roomIDPrefix + data);
+			newRoomEl.title = data;
+			newRoomEl.getElementsByClassName("room-name")[0].innerHTML = data;
+			newRoomEl.addEventListener("click", function() {
+				joinRoom(data);
+			});
+			rooms.el.list.appendChild(newRoomEl);
+		},
+		remove: function(data) {
+			var roomElToRemove = document.getElementById(globals.roomIDPrefix + data.name);
+			roomElToRemove.parentElement.removeChild(roomElToRemove);
+		},
+		addAll: function(data) {
+			for (var i = 0; i < data.length; i++) {
+				rooms.evt.add(data[i]);
+			}
+		},
+		join: function(data) {
+			var allRooms = rooms.el.list.getElementsByClassName("room");
+			for (var i = 0; i < allRooms.length; i++) {
+				allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.remove("on");
+				console.log(allRooms[i].id);
+				if (allRooms[i].id == (globals.roomIDPrefix + data)) {
+					allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.add("on");
+				}
+			}
+		}
+	}
 };
 var chat = {
 	el: {
@@ -42,49 +73,8 @@ var chat = {
 		},
 		send: function() {
 			var msg = chat.el.textBox.value;
-			sendMessage(msg);
+			sendMessage(msg.substring(0, 249));
 			chat.el.textBox.value = "";
-		}
-	}
-};
-var rooms = {
-	el: {
-		list: document.querySelector("#rooms .list"),
-		template: document.getElementById("template-room")
-	},
-	evt: {
-		add: function(data) {
-			var newRoomEl = rooms.el.template.cloneNode(true);
-			newRoomEl.setAttribute("id", globals.roomIDPrefix + data.name);
-			newRoomEl.title = data.name;
-			newRoomEl.getElementsByClassName("room-name")[0].innerHTML = data.name;
-			if (data.preConnect) {
-				newRoomEl.getElementsByClassName("connectionIndicator")[0].classList.toggle("on");
-			}
-			newRoomEl.addEventListener("click", function() {
-				joinRoom(data.name);
-			});
-			rooms.el.list.appendChild(newRoomEl);
-		},
-		remove: function(data) {
-			var roomElToRemove = document.getElementById(globals.roomIDPrefix + data.name);
-			roomElToRemove.parentElement.removeChild(roomElToRemove);
-		},
-		addAll: function(data) {
-			for (var i = 0; i < data.length; i++) {
-				rooms.evt.add({
-					name: data[i]
-				});
-			}
-		},
-		join: function(data) {
-			var allRooms = rooms.el.list.getElementsByClassName("room");
-			for (var i = 0; i < allRooms.length; i++) {
-				allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.remove("on");
-				if (allRooms[i].id == globals.roomIDPrefix + data.name) {
-					allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.add("on");
-				}
-			}
 		}
 	}
 };
@@ -96,9 +86,9 @@ var users = {
 	evt: {
 		add: function(data) {
 			var newUserEl = document.getElementById("template-user-name").cloneNode(true);
-			newUserEl.setAttribute("id", globals.userIDPrefix + data.name);
-			newUserEl.title = newUserEl.innerHTML = data.name;
-			if (data.you) {
+			newUserEl.setAttribute("id", globals.userIDPrefix + data);
+			newUserEl.title = newUserEl.innerHTML = data;
+			if (data == globals.username) {
 				newUserEl.classList.add("you");
 			}
 			users.el.list.appendChild(newUserEl);
@@ -114,10 +104,7 @@ var users = {
 		},
 		addAll: function(data) {
 			for (var i = 0; i < data.length; i++) {
-				users.evt.add({
-					name: data[i],
-					you: data[i] == globals.username ? true : false
-				});
+				users.evt.add(data[i]);
 			}
 		},
 		removeAll: function() {
@@ -147,10 +134,6 @@ document.getElementById("prompt-user-submit").addEventListener("click", function
 	sendUsername(name);
 	prompt.evt.toggleActive(prompt.el.user);
 	globals.username = name;
-	users.evt.add({
-		name: globals.username,
-		you: true
-	});
 });
 document.getElementById("prompt-room-submit").addEventListener("click", function() {
 	var inputVal = document.getElementById("prompt-room-input");
@@ -158,10 +141,6 @@ document.getElementById("prompt-room-submit").addEventListener("click", function
 	inputVal.value = "";
 	sendRoom(name);
 	prompt.evt.toggleActive(prompt.el.room);
-	rooms.evt.add({
-		name: name,
-		preConnect: true
-	});
 });
 document.getElementById("newRoomButton").addEventListener("click", function() {
 	prompt.evt.toggleActive(prompt.el.room);

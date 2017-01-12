@@ -29,28 +29,16 @@ socket.on("reqUsername", function(data) {
 	prompt.evt.toggleActive(prompt.el.user);
 });
 socket.on("reqRoom", function(data) {
-	if (data === "taken") {
+	if (data == "taken") {
 		alert("That room name is taken!");
 	}
 	prompt.evt.toggleActive(prompt.el.room);
 });
 
 socket.on("user-joined", function(data) {
-	users.evt.add({
-		name: data
-	});
-	chat.evt.add({
-		from: "",
-		msg: data + " has joined the room.",
-		serverMsg: true
-	});
+	users.evt.add(data);
 });
 socket.on("user-left", function(data) {
-	chat.evt.add({
-		from: "",
-		msg: data + " has left the room.",
-		serverMsg: true
-	});
 	users.evt.remove({
 		name: data
 	});
@@ -60,26 +48,16 @@ socket.on("user-all", function(data) {
 });
 
 socket.on("room-created", function(data) {
-	rooms.evt.add({
-		name: data
-	});
+	rooms.evt.add(data);
 });
 socket.on("room-all", function(data) {
 	rooms.evt.addAll(data);
 });
 socket.on("room-joined", function(data) {
-	rooms.evt.join({
-		name: data.name
-	});
+	rooms.evt.join(data.name);
 	chat.evt.removeAll();
-	chat.evt.add({
-		from: "",
-		msg: globals.username + " has joined the room.",
-		serverMsg: true
-	});
 	users.evt.removeAll();
 	users.evt.addAll(data.users);
-	console.log(data.users);
 });
 socket.on("room-delete", function(data) {
 	rooms.evt.remove({
