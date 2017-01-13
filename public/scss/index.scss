@@ -11,6 +11,10 @@ $sideWidth: 202px;
 $createRoomBG: rgb(238, 238, 238);
 $backgroundGradient: linear-gradient(to top left, #000, #404040);
 
+body.useless {
+	opacity: 0.4;
+	pointer-events: none;
+}
 #container {
 	textarea {
 		resize: none;

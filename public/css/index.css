@@ -6,6 +6,10 @@
 body, textarea {
   font-family: Helvetica, Arial; }
 
+body.useless {
+  opacity: 0.4;
+  pointer-events: none; }
+
 #container textarea {
   resize: none; }
 #container .section {

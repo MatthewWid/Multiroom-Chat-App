@@ -20,13 +20,11 @@ function sendMessage(msg) {
 // Receive from server functions
 socket.on("reqUsername", function(data) {
 	if (data ? data.taken : false) {
-		alert("The username " + data.rejectedUsername + " is taken");
-		users.evt.remove({
-			name: data.rejectedUsername,
-			you: true
-		});
+		alert("The username " + data.rejectedUsername + " is taken!");
+		prompt.evt.toggleActive(prompt.el.user);
+	} else {
+		prompt.evt.toggleActive(prompt.el.user);
 	}
-	prompt.evt.toggleActive(prompt.el.user);
 });
 socket.on("reqRoom", function(data) {
 	if (data == "taken") {
@@ -67,4 +65,10 @@ socket.on("room-delete", function(data) {
 
 socket.on("chat-message", function(data) {
 	chat.evt.add(data);
+});
+
+socket.on("disconnect", function() {
+	document.body.classList.add("useless");
+	socket.disconnect();
+	alert("You have been disconnected from the server!\n\nTry refreshing the page.");
 });

@@ -2,7 +2,8 @@
 var globals = {
 	roomIDPrefix: "rid-",
 	userIDPrefix: "uid-",
-	username: ""
+	username: "",
+	inRoom: false
 };
 var rooms = {
 	el: {
@@ -33,9 +34,10 @@ var rooms = {
 			var allRooms = rooms.el.list.getElementsByClassName("room");
 			for (var i = 0; i < allRooms.length; i++) {
 				allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.remove("on");
-				console.log(allRooms[i].id);
 				if (allRooms[i].id == (globals.roomIDPrefix + data)) {
 					allRooms[i].getElementsByClassName("connectionIndicator")[0].classList.add("on");
+					globals.inRoom = true;
+					chat.el.textBox.focus();
 				}
 			}
 		}
@@ -122,6 +124,9 @@ var prompt = {
 	evt: {
 		toggleActive: function(promptEl) {
 			promptEl.classList.toggle("active");
+			if (promptEl.classList.contains("active")) {
+				promptEl.getElementsByClassName("prompt-input")[0].focus();
+			}
 		}
 	}
 };
@@ -142,11 +147,27 @@ document.getElementById("prompt-room-submit").addEventListener("click", function
 	sendRoom(name);
 	prompt.evt.toggleActive(prompt.el.room);
 });
+prompt.el.user.getElementsByClassName("prompt-input")[0].addEventListener("keypress", function(event) {
+	if (event.keyCode == 13) {
+		event.preventDefault();
+		document.getElementById("prompt-user-submit").click();
+	}
+});
+prompt.el.room.getElementsByClassName("prompt-input")[0].addEventListener("keypress", function(event) {
+	if (event.keyCode == 13) {
+		event.preventDefault();
+		document.getElementById("prompt-room-submit").click();
+	}
+});
 document.getElementById("newRoomButton").addEventListener("click", function() {
 	prompt.evt.toggleActive(prompt.el.room);
 });
 chat.el.sendButton.addEventListener("click", function() {
-	chat.evt.send();
+	if (globals.inRoom) {
+		chat.evt.send();
+	} else {
+		alert("You must join a room before being able to send messages!");
+	}
 });
 chat.el.textBox.addEventListener("keypress", function(event) {
 	if (event.keyCode == 13) {
