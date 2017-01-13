@@ -15,9 +15,6 @@ server.listen(PORT, function() {
 	console.log("Now listening on port: " + PORT);
 });
 app.use(express.static("public"));
-app.get("/", function(req, res) {
-	res.sendFile(__dirname + "public/index.html");
-});
 
 var allUsers = [];
 var allRooms = [];
