@@ -2,12 +2,12 @@
   "name": "chatter",
   "version": "1.0.0",
   "description": "A simple chat application with multiple rooms",
-  "main": "app.js",
+  "main": ".src/app.js",
   "engines": {
     "node": "4.5.0"
   },
   "scripts": {
-    "start": "node app.js"
+    "start": "node .src/app.js"
   },
   "author": "Matthewmob",
   "license": "ISC",
