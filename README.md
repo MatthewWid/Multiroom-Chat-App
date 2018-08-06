@@ -1,2 +1,6 @@
-# Multiroom-Chat-App
-A test app for chatting with multiple rooms and a users connected list
+# Multiroom Chat App
+A social chatroom application implemented with Node+Express and SocketIO.
+
+<p align="center">
+  <img src="./doc/chatroom_preview.gif" alt="preview gif" width="100%" />
+</p>
