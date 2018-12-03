@@ -9,15 +9,11 @@
   "scripts": {
     "start": "node .src/app.js"
   },
-  "author": "Matthewmob",
+  "author": "MatthewWid",
   "license": "ISC",
   "dependencies": {
     "express": "^4.14.0",
     "socket.io": "^1.7.2",
     "validator": "^6.2.1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Matthewmob/Multiroom-Chat-App"
   }
 }
